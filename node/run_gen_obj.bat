@@ -1,0 +1,1 @@
+node gen_obj_mesh test_tris 1 4 4 128 64 block_1x4x4

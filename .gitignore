@@ -1,0 +1,5 @@
+# IDEs/Debuggers
+/.vs/
+/.vscode/
+
+*.obj

@@ -89,13 +89,23 @@ console.log(`Args ${args}`);
 
 let g_config = {};
 g_config.shape = args[0];							// shape type
-g_config.width = parseFloat(args[1]); 				// width of mesh in world metres
-g_config.height = parseFloat(args[2]); 				// width of mesh in world metres
-g_config.depth = parseFloat(args[3]); 				// width of mesh in world metres
+//g_config.width = parseFloat(args[1]); 				// width of mesh in world metres
+//g_config.height = parseFloat(args[2]); 				// width of mesh in world metres
+g_config.size = {									// width of mesh in world metres
+	x: parseFloat(args[1]),
+	y: parseFloat(args[2]),
+	z: parseFloat(args[3]),
+};
+g_config.halfSize = {
+	x: g_config.size.x / 2,
+	y: g_config.size.y / 2,
+	z: g_config.size.z / 2,
+};
+//g_config.depth = parseFloat(args[3]); 				// width of mesh in world metres
 g_config.textureRes = parseFloat(args[4]); 			// eg 128 for retro 3D
 g_config.pixelsPerMetre = parseFloat(args[5]);		// eg 64 how many in-world metres does the texture res stretch over?
 g_config.outputName = args[6];						// result object name
-g_config.outputPath = `${g_config.outputName}.obj`; // result file name
+g_config.outputPath = `./output/${g_config.outputName}.obj`; // result file name
 
 
 switch (g_config.shape) {
@@ -118,8 +128,8 @@ switch (g_config.shape) {
 
 function quickUVCalc(cfg) {
 	// eg 64 * 1 == 64 pixels, half a 128 texture
-	const totalPixelsCovered = cfg.pixelsPerMetre * cfg.width;
-	console.log(`Total pixels over ${cfg.width} metres at ${cfg.pixelsPerMetre} per metre: ${totalPixelsCovered}`);
+	const totalPixelsCovered = cfg.pixelsPerMetre * cfg.size.x;
+	console.log(`Total pixels over ${cfg.size.x} metres at ${cfg.pixelsPerMetre} per metre: ${totalPixelsCovered}`);
 	// eg 64 / 128 == 0.5
 	const uvWidth = cfg.textureRes / totalPixelsCovered;
 	console.log(`\tUV width ${uvWidth}`);
@@ -147,12 +157,12 @@ function calcTriUVs(tri, cfg) {
 	// for now, assuming we can use mesh width and height
 	// normal will be 0, 0, 1
 	let n = tri.normal;
-	tri.verts[0].u = cfg.width;
-	tri.verts[0].v = cfg.height;
-	tri.verts[1].u = cfg.width;
-	tri.verts[1].v = cfg.height;
-	tri.verts[2].u = cfg.width;
-	tri.verts[2].v = cfg.height;
+	tri.verts[0].u = cfg.size.x;
+	tri.verts[0].v = cfg.size.y;
+	tri.verts[1].u = cfg.size.x;
+	tri.verts[1].v = cfg.size.y;
+	tri.verts[2].u = cfg.size.x;
+	tri.verts[2].v = cfg.size.y;
 }
 
 /**
@@ -161,7 +171,7 @@ auto-calculate UV coords for each triangle
 function calcTrisMeshUVs(mesh, cfg) {
 	if (mesh.tris.length === 0) { console.log(`Mesh has no tris`); return; }
 	console.log(`Calc tris UVs`);
-	let w = cfg.width, h = cfg.height, d = cfg.depth;
+	let w = cfg.size.x, h = cfg.size.y, d = cfg.size.z;
 	let texMinX = 0, texMinY = 0, texMinZ = 0
 	
 	let texMaxX = utils.calcUVRange(w, cfg.pixelsPerMetre, cfg.textureRes);
@@ -186,7 +196,8 @@ function test_tris(cfg) {
 	const writeOutput = true;
 	
 	console.log(`Test tris`);
-	let w = cfg.width, h = cfg.height, d = cfg.depth;
+	let w = cfg.size.x, h = cfg.size.y, d = cfg.size.z;
+	let hx = cfg.halfSize.x, hy = cfg.halfSize.y, hz = cfg.halfSize.z;
 	let trisMesh = utils.createTrisMesh();
 	
 	let texMinX = 0, texMinY = 0, texMinZ = 0
@@ -199,15 +210,15 @@ function test_tris(cfg) {
 	console.log(`UV limits for each axis: ${texMaxX}, ${texMaxY}, ${texMaxZ}`);
 	
 	let verts = [
-		utils.makeVert(-w, -h, d, 0, 0),
-		utils.makeVert(w, -h, d, 1, 0),
-		utils.makeVert(w, h, d, 1, 1),
-		utils.makeVert(-w, h, d, 0, 1),
+		utils.makeVert(-hx, -hy, hz, 0, 0),
+		utils.makeVert(hx, -hy, hz, 1, 0),
+		utils.makeVert(hx, hy, hz, 1, 1),
+		utils.makeVert(-hx, hy, hz, 0, 1),
 		
-		utils.makeVert(-w, -h, -d, 0, 0),
-		utils.makeVert(w, -h, -d, 1, 0),
-		utils.makeVert(w, h, -d, 1, 1),
-		utils.makeVert(-w, h, -d, 0, 1)
+		utils.makeVert(-hx, -hy, -hz, 0, 0),
+		utils.makeVert(hx, -hy, -hz, 1, 0),
+		utils.makeVert(hx, hy, -hz, 1, 1),
+		utils.makeVert(-hx, hy, -hz, 0, 1)
 	];
 	
 	let triangles = [
@@ -232,7 +243,7 @@ function test_tris(cfg) {
 	];
 	
 	// Add triangles - make sure to duplicate the verts
-	// so their UVs can be modified separately
+	// so their UVs can be modified separately!
 	triangles.forEach(tri => {
 		let v0 = utils.copyVert(verts[tri[0]]);
 		let v1 = utils.copyVert(verts[tri[1]]);
@@ -352,7 +363,7 @@ function test_tris(cfg) {
 
 function test_tris_2(cfg) {
 	console.log(`Test tris`);
-	let w = cfg.width, h = cfg.height, d = cfg.depth;
+	let w = cfg.size.x, h = cfg.size.y, d = cfg.size.z;
 	let tris = utils.createTrisMesh();
 	
 	let texW = utils.calcUVRange(w, cfg.pixelsPerMetre, cfg.textureRes);

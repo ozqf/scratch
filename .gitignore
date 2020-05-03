@@ -1,6 +1,7 @@
 # IDEs/Debuggers
 /.vs/
 /.vscode/
-/node/output/
+/node/zqf_auto/*
 
+*.escn
 *.obj

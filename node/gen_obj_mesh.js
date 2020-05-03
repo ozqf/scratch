@@ -55,6 +55,7 @@ https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25
 // fetch required modules
 const fs = require("fs");
 const utils = require("./gen_obj_utils.js");
+const g_verbose = false;
 
 /////////////////////////////////////////////
 // Output
@@ -105,7 +106,7 @@ g_config.halfSize = {
 g_config.textureRes = parseFloat(args[4]); 			// eg 128 for retro 3D
 g_config.pixelsPerMetre = parseFloat(args[5]);		// eg 64 how many in-world metres does the texture res stretch over?
 g_config.outputName = args[6];						// result object name
-g_config.outputPath = `./output/${g_config.outputName}.obj`; // result file name
+g_config.outputPath = `./zqf_auto/mesh/${g_config.outputName}.obj`; // result file name
 
 
 switch (g_config.shape) {
@@ -349,15 +350,19 @@ function test_tris(cfg) {
 	
 	if (!writeOutput) { return; }
 	
-	console.log(`Verts: `);
-	console.log(verts);
-	console.log(JSON.stringify(trisMesh, null, 2));
+	if (g_verbose) {
+		console.log(`Verts: `);
+		console.log(verts);
+		console.log(JSON.stringify(trisMesh, null, 2));
+	}
+	
 	
 	
 	let objMesh = trisMesh.toObjMesh();
 	let txt = objMesh.writeAsci(cfg.outputName, cfg.outputPath);
-	console.log(txt);
-	
+	if (g_verbose) {
+		console.log(txt);
+	}
 	writeFile(cfg.outputPath, txt);
 }
 
@@ -425,7 +430,8 @@ function test_tris_2(cfg) {
 	
 	let objMesh = tris.toObjMesh();
 	let txt = objMesh.writeAsci(cfg.outputName, cfg.outputPath);
-	console.log(txt);
-	
+	if (g_verbose) {
+		console.log(txt);
+	}
 	writeFile(cfg.outputPath, txt);
 }

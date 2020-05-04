@@ -51,7 +51,8 @@ const g_meshSubDir = "mesh/";
 
 const g_meshPath = "res://blender_import/cube_one_uv_side.obj";
 
-const g_materialPath = "res://materials/mat_matte_test.tres";
+//const g_materialPath = "res://materials/mat_matte_test.tres";
+const g_materialPath = "res://zqf_auto/materials/mat_dev_grid.tres";
 
 const g_materialName = "mat_zqf_blockmap_cube";
 

@@ -8,8 +8,11 @@ node gen_obj_mesh test_tris 16 16 16 128 64 cube_16x16x16
 @rem walls
 node gen_obj_mesh test_tris 4 4 1 128 64 wall_4x4x1
 node gen_obj_mesh test_tris 8 4 1 128 64 wall_8x4x1
+node gen_obj_mesh test_tris 16 4 1 128 64 wall_16x4x1
+node gen_obj_mesh test_tris 16 8 1 128 64 wall_16x8x1
 node gen_obj_mesh test_tris 4 8 1 128 64 wall_4x8x1
 node gen_obj_mesh test_tris 8 8 1 128 64 wall_8x8x1
+node gen_obj_mesh test_tris 8 16 1 128 64 wall_8x16x1
 node gen_obj_mesh test_tris 16 16 1 128 64 wall_16x16x1
 
 @rem floors

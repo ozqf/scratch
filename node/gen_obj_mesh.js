@@ -65,12 +65,92 @@ function writeFile(path, data) {
 	fs.writeFileSync(path, data);
 }
 
+function readJobs(path) {
+	let jobs = JSON.parse(fs.readFileSync(path, "utf-8"));
+	console.log(`Read ${jobs.batches.length} jobs from ${path}`);
+	return jobs;
+}
+
 console.log(`Zqf simple .obj mesh generator`);
+
+function buildConfig(jobFile, job, sizeArr) {
+	let cfg = {};
+	cfg.textureRes = g_jobFile.textureResolution;
+	cfg.pixelsPerMetre = g_jobFile.pixelsPerMetre;
+	cfg.size = {
+		x: sizeArr[0],
+		y: sizeArr[1],
+		z: sizeArr[2]
+	};
+	cfg.halfSize = {
+		x: cfg.size.x / 2,
+		y: cfg.size.y / 2,
+		z: cfg.size.z / 2
+	};
+	cfg.outputName = `${job.name}_${cfg.size.x}x${cfg.size.y}x${cfg.size.z}`;
+	cfg.outputPath = `${jobFile.outputPath}/${job.name}/${cfg.outputName}.obj`;
+	return cfg;
+}
+
+/////////////////////////////////////////////
+// run jobs file
+/////////////////////////////////////////////
+let g_jobFile = readJobs("gen_obj_mesh_jobs.json");
+
+// this config object will be reused. per-job stuff patched in
+// let g_config = {};
+// g_config.textureRes = g_jobFile.textureResolution;
+// g_config.pixelsPerMetre = g_jobFile.pixelsPerMetre;
+let g_jobs = [];
+g_jobFile.batches.forEach(job => {
+	// prepare names and paths
+	// result object name
+	//g_config.outputName = job.name;
+
+	// iterate sizes
+	// TODO: Currently have to make the directories manually!
+	job.sizes.forEach(sizeArray => {
+		//let path = `${g_}`;
+		g_jobs.push(buildConfig(g_jobFile, job, sizeArray));
+	});
+});
+
+console.log(`Built ${g_jobs.length} jobs`);
+console.log(`\teg: `, g_jobs[0]);
+
+function findJobOfSize(jobs, size, ignoreIndex) {
+	for (let i = 0; i < jobs.length; ++i) {
+		if (i === ignoreIndex) { continue; }
+		let job = jobs[i];
+		if (job.size.x === size.x
+			&& job.size.y === size.y
+			&& job.size.z === size.z) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+// look for dupes
+let foundDupe = false;
+g_jobs.forEach((job, i) => {
+	let indexOfDupe = findJobOfSize(g_jobs, job.size, i);
+	if (indexOfDupe !== -1) {
+		console.log(`Duplicate size at job ${indexOfDupe}: `, job.size);
+		foundDupe = true;
+	}
+});
+if (foundDupe) {
+	return;
+}
+g_jobs.forEach(job => {
+	test_tris(job);
+});
 
 /////////////////////////////////////////////
 // Read args
 /////////////////////////////////////////////
-
+/*
 let args;
 if (process.argv.length === 2) {
 	// Use command line args
@@ -85,14 +165,14 @@ else {
 	console.log(`incorrect arg count.`);
 	return;
 }
+*/
 
-console.log(`Args ${args}`);
+//console.log(`Args ${args}`);
 
+/*
 let g_config = {};
-g_config.shape = args[0];							// shape type
-//g_config.width = parseFloat(args[1]); 				// width of mesh in world metres
-//g_config.height = parseFloat(args[2]); 				// width of mesh in world metres
-g_config.size = {									// width of mesh in world metres
+g_config.shape = args[0];
+g_config.size = {
 	x: parseFloat(args[1]),
 	y: parseFloat(args[2]),
 	z: parseFloat(args[3]),
@@ -102,7 +182,6 @@ g_config.halfSize = {
 	y: g_config.size.y / 2,
 	z: g_config.size.z / 2,
 };
-//g_config.depth = parseFloat(args[3]); 				// width of mesh in world metres
 g_config.textureRes = parseFloat(args[4]); 			// eg 128 for retro 3D
 g_config.pixelsPerMetre = parseFloat(args[5]);		// eg 64 how many in-world metres does the texture res stretch over?
 g_config.outputName = args[6];						// result object name
@@ -121,12 +200,12 @@ switch (g_config.shape) {
 	console.log(`Unknown shape type ${g_config.shape}`);
 	return;
 }
-
+*/
 
 /////////////////////////////////////////////
 // Calc
 /////////////////////////////////////////////
-
+/*
 function quickUVCalc(cfg) {
 	// eg 64 * 1 == 64 pixels, half a 128 texture
 	const totalPixelsCovered = cfg.pixelsPerMetre * cfg.size.x;
@@ -135,6 +214,7 @@ function quickUVCalc(cfg) {
 	const uvWidth = cfg.textureRes / totalPixelsCovered;
 	console.log(`\tUV width ${uvWidth}`);
 }
+*/
 
 function calcTriUVs(tri, cfg) {
 	// console.log(`Calc tri UVs`);

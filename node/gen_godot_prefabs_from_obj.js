@@ -56,18 +56,31 @@ const g_materialPath = "res://zqf_auto/materials/mat_dev_grid.tres";
 
 const g_materialName = "mat_zqf_blockmap_cube";
 
-const g_files = fs.readdirSync(`./zqf_auto/mesh`);
+let g_files = fs.readdirSync(`./zqf_auto/mesh/beam`);
+g_files = g_files.concat(fs.readdirSync(`./zqf_auto/mesh/cube`));
+g_files = g_files.concat(fs.readdirSync(`./zqf_auto/mesh/square`));
+g_files = g_files.concat(fs.readdirSync(`./zqf_auto/mesh/panel`));
 
-let g_objMeshes = [
-	{ name: "beam_2x1x1", size: { x: 2, y: 1, z: 1 } },
-	{ name: "beam_4x1x1", size: { x: 4, y: 1, z: 1 } },
-	{ name: "beam_8x1x1", size: { x: 8, y: 1, z: 1 } },
-	{ name: "beam_16x1x1", size: { x: 16, y: 1, z: 1 } },
+if (g_files.length === 0) {
+	console.log(`No files found`);
+	return;
+}
+for (let i = 0; i < g_files.length; ++i) {
 	
-	{ name: "cube_1x1x1", size: { x: 1, y: 1, z: 1 } },
-];
+}
+console.log(g_files);
+console.log(`Read ${g_files.length} input files`);
 
-g_objMeshes = [];
+// let g_objMeshes = [
+// 	{ name: "beam_2x1x1", size: { x: 2, y: 1, z: 1 } },
+// 	{ name: "beam_4x1x1", size: { x: 4, y: 1, z: 1 } },
+// 	{ name: "beam_8x1x1", size: { x: 8, y: 1, z: 1 } },
+// 	{ name: "beam_16x1x1", size: { x: 16, y: 1, z: 1 } },
+	
+// 	{ name: "cube_1x1x1", size: { x: 1, y: 1, z: 1 } },
+// ];
+
+let g_objMeshes = [];
 
 // go
 main();
@@ -121,7 +134,7 @@ function build(objects) {
 	objects.forEach(obj => {
 		let name = obj.name;
 		let size = obj.size;
-		let outputPath = `${g_outputDir}/scene/${name}_.escn`;
+		let outputPath = `${g_outputDir}scene/${name}_.escn`;
 		let meshPath = `${g_godotRoot}${g_outputDir}${g_meshSubDir}${name}.obj`;
 		buildByPatching(g_materialPath, meshPath, name, outputPath, size, false);
 	});

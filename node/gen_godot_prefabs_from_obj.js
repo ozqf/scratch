@@ -56,20 +56,20 @@ const g_materialPath = "res://zqf_auto/materials/mat_dev_grid.tres";
 
 const g_materialName = "mat_zqf_blockmap_cube";
 
-let g_files = fs.readdirSync(`./zqf_auto/mesh/beam`);
-g_files = g_files.concat(fs.readdirSync(`./zqf_auto/mesh/cube`));
-g_files = g_files.concat(fs.readdirSync(`./zqf_auto/mesh/square`));
-g_files = g_files.concat(fs.readdirSync(`./zqf_auto/mesh/panel`));
+// let g_files = fs.readdirSync(`./zqf_auto/mesh/beam`);
+// g_files = g_files.concat(fs.readdirSync(`./zqf_auto/mesh/cube`));
+// g_files = g_files.concat(fs.readdirSync(`./zqf_auto/mesh/square`));
+// g_files = g_files.concat(fs.readdirSync(`./zqf_auto/mesh/panel`));
 
-if (g_files.length === 0) {
-	console.log(`No files found`);
-	return;
-}
-for (let i = 0; i < g_files.length; ++i) {
+// if (g_files.length === 0) {
+	// console.log(`No files found`);
+	// return;
+// }
+// for (let i = 0; i < g_files.length; ++i) {
 	
-}
-console.log(g_files);
-console.log(`Read ${g_files.length} input files`);
+// }
+// console.log(g_files);
+// console.log(`Read ${g_files.length} input files`);
 
 // let g_objMeshes = [
 // 	{ name: "beam_2x1x1", size: { x: 2, y: 1, z: 1 } },
@@ -83,7 +83,10 @@ console.log(`Read ${g_files.length} input files`);
 let g_objMeshes = [];
 
 // go
-main();
+convertFilesInPath(g_outputDir + g_meshSubDir, "beam");
+convertFilesInPath(g_outputDir + g_meshSubDir, "cube");
+convertFilesInPath(g_outputDir + g_meshSubDir, "square");
+convertFilesInPath(g_outputDir + g_meshSubDir, "panel");
 
 ////////////////////////////////////////////////////////////
 // Prepare input/output
@@ -109,7 +112,7 @@ function extractSize(sizeTxt) {
 	};
 }
 
-function extractFromFileName(fileName) {
+function extractJobFromFileName(fileName) {
 	// chop off extension
 	let dotParts = fileName.split(`.`);
 	dotParts.splice(1, dotParts.length - 1);
@@ -130,28 +133,29 @@ function extractFromFileName(fileName) {
 // Do
 ///////////////////////////////////////////////////////////////
 
-function build(objects) {
-	objects.forEach(obj => {
-		let name = obj.name;
-		let size = obj.size;
-		let outputPath = `${g_outputDir}scene/${name}_.escn`;
-		let meshPath = `${g_godotRoot}${g_outputDir}${g_meshSubDir}${name}.obj`;
-		buildByPatching(g_materialPath, meshPath, name, outputPath, size, false);
-	});
-}
-
-function main() {
+function convertFilesInPath(root, subDir) {
+	let files = fs.readdirSync(root + subDir);
 	
 	console.log(`Files:`);
-	console.log(g_files);
+	console.log(files);
 
-	let objects = g_files.map(f => extractFromFileName(f));
+	let objects = files.map(f => extractJobFromFileName(f));
 	// g_files.forEach(f => {
 		// extractFromFileName(f);
 	// });
 	console.log(`Inputs:`);
 	console.log(objects);
-	build(objects);
+	build(objects, subDir);
+}
+
+function build(objects, subDir) {
+	objects.forEach(obj => {
+		let name = obj.name;
+		let size = obj.size;
+		let outputPath = `${g_outputDir}scene/${subDir}/${name}_.escn`;
+		let meshPath = `${g_godotRoot}${g_outputDir}${g_meshSubDir}${name}.obj`;
+		buildByPatching(g_materialPath, meshPath, name, outputPath, size, false);
+	});
 }
 
 // buildByPatching(

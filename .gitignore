@@ -2,6 +2,6 @@
 /.vs/
 /.vscode/
 /node/zqf_auto/*
-
+/node/node_modules/
 *.escn
 *.obj

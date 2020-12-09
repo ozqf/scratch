@@ -3,5 +3,7 @@
 /.vscode/
 /node/zqf_auto/*
 /node/node_modules/
+/node/input/
+/node/output/
 *.escn
 *.obj

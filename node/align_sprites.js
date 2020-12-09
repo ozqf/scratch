@@ -2,8 +2,9 @@ const process = require("process");
 const Jimp = require('jimp');
 const jobs = [
 	{
-		source: "C:\\Dropbox\\projects\\assets\\Freedoom_Sprites_Sorted\\Player\\PLAYA1.png",
-		output: "player_a_1.png",
+		//source: "C:\\Dropbox\\projects\\assets\\Freedoom_Sprites_Sorted\\Player\\PLAYA1.png",
+		source: "input\\PLAYA1.png",
+		output: "output\\player_a_1.png",
 		offsetX: 22,
 		offsetY: 52
 	}
@@ -23,6 +24,17 @@ function doJob(job) {
 		const offY = job.offsetY;
 		console.log(`\t${srcW} by ${srcH} pixels`);
 		console.log(`\tAlignment: ${offX} by ${offY}`);
+		const newW = offX * 2;
+		const newH = offY * 2;
+		/*
+		eg
+		41 by 56
+		22 by 52
+		*/
+		new Jimp(newW, newH, 0xff00ffff, (err, destImg) => {
+			destImg.blit(img, 0, 0);
+			destImg.writeAsync(job.output);
+		});
 	}).catch(err => {
 		console.error(err);
 	});

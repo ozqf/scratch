@@ -3,7 +3,8 @@
 /.vscode/
 /node/zqf_auto/*
 /node/node_modules/
-/node/input/
+/node/input/*
+!/node/input/jobs.json
 /node/output/
 *.escn
 *.obj

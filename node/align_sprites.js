@@ -1,3 +1,4 @@
+'use strict';
 const process = require("process");
 const Jimp = require('jimp');
 const fs = require("fs");
@@ -12,7 +13,9 @@ const jobs2 = [
 ];
 const inputDir = "input";
 const outputDir = "output";
-const jobs = JSON.parse(fs.readFileSync(`input/jobs.json`, "utf-8"));
+const data = JSON.parse(fs.readFileSync(`input/jobs.json`, "utf-8"));
+const settings = data.settings;
+const jobs = data.jobs;
 
 function fatal(err) {
 	console.error(err);
@@ -38,7 +41,7 @@ function fillChequer(image) {
 	}
 }
 
-function doJob(job) {
+function doJob(settings, job) {
 	Jimp.read(`${inputDir}/${job.src}`).then(img => {
 		const srcW = img.bitmap.width;
 		const srcH = img.bitmap.height;
@@ -47,7 +50,9 @@ function doJob(job) {
 		console.log(`Read ${job.src} - ${srcW} by ${srcH} off ${offX} by ${offY}`);
 		// console.log(`\t${srcW} by ${srcH} pixels`);
 		// console.log(`\tAlignment: ${offX} by ${offY}`);
-		let newW, newH, x, y;
+		let newW = offX * 2;
+		let newH = offY * 2; 
+		let x = 0, y = 0;
 		if (newW < srcW) {
 			newW = (srcW - offX) * 2;
 			x = Math.ceil(srcW / 2) - offX;
@@ -70,8 +75,14 @@ function doJob(job) {
 		22 by 52
 		*/
 		console.log(`Writing to ${job.out} (${newW} by ${newH} at ${x}, ${y})`);
-		new Jimp(newW, newH, 0xffffffff, (err, destImg) => {
-			fillChequer(destImg);
+		let fillColour = 0x00000000;
+		if (settings.chequer_bg === true) {
+			fillColour = 0xffffffff
+		}
+		new Jimp(newW, newH, fillColour, (err, destImg) => {
+			if (settings.chequer_bg === true) {
+				fillChequer(destImg);
+			}
 			destImg.blit(img, x, y);
 			destImg.writeAsync(`${outputDir}/${job.out}`);
 		});
@@ -83,5 +94,5 @@ function doJob(job) {
 const numJobs = jobs.length;
 console.log(`Read ${numJobs} jobs`);
 for (let i = 0; i < numJobs; ++i) {
-	doJob(jobs[i]);
+	doJob(settings, jobs[i]);
 }

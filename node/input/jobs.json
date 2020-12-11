@@ -1,12 +1,76 @@
 {
-	"settings": {
-		"chequer_bg": false
-	},
 	"jobs": [
-		{ "src": "PLAYA1.png", "out": "player_a1.png", "x": 22, "y": 52 },
-		{ "src": "PLAYA2A8.png", "out": "player_a2_a8.png", "x": 16, "y": 52 },
-		{ "src": "PLAYA3A7.png", "out": "player_a3_a7.png", "x": 21, "y": 50 },
-		{ "src": "PLAYA4A6.png", "out": "player_a4_a6.png", "x": 23, "y": 49 },
-		{ "src": "PLAYA5.png", "out": "player_a5.png", "x": 24, "y": 53 }
+		{
+			"settings": {
+				"chequer_bg": true,
+				"inputDir": "player",
+				"outputDir": "player"
+			},
+			"items": [
+				{ "src": "PLAYA1.png", "out": "plyr_a1.png", "x": 22, "y": 52 },
+				{ "src": "PLAYA2A8.png", "out": "plyr_a2_a8.png", "x": 16, "y": 52 },
+				{ "src": "PLAYA3A7.png", "out": "plyr_a3_a7.png", "x": 21, "y": 50 },
+				{ "src": "PLAYA4A6.png", "out": "plyr_a4_a6.png", "x": 23, "y": 49 },
+				{ "src": "PLAYA5.png", "out": "plyr_a5.png", "x": 24, "y": 53 },
+				
+				{ "src": "PLAYB1.png", "out": "plyr_b1.png", "x": 19, "y": 53 },
+				{ "src": "PLAYB2B8.png", "out": "plyr_b2_b8.png", "x": 18, "y": 52 },
+				{ "src": "PLAYB3B7.png", "out": "plyr_b3_b7.png", "x": 19, "y": 52 },
+				{ "src": "PLAYB4B6.png", "out": "plyr_b4_b6.png", "x": 21, "y": 52 },
+				{ "src": "PLAYB5.png", "out": "plyr_b5.png", "x": 20, "y": 53 },
+				
+				{ "src": "PLAYC1.png", "out": "plyr_c1.png", "x": 20, "y": 53 },
+				{ "src": "PLAYC2C8.png", "out": "plyr_c2_c8.png", "x": 16, "y": 51 },
+				{ "src": "PLAYC3C7.png", "out": "plyr_c3_c7.png", "x": 18, "y": 51 },
+				{ "src": "PLAYC4C6.png", "out": "plyr_c4_c6.png", "x": 22, "y": 51 },
+				{ "src": "PLAYC5.png", "out": "plyr_c5.png", "x": 21, "y": 52 },
+				
+				{ "src": "PLAYD1.png", "out": "plyr_d1.png", "x": 19, "y": 52 },
+				{ "src": "PLAYD2D8.png", "out": "plyr_d2_d8.png", "x": 17, "y": 52 },
+				{ "src": "PLAYD3D7.png", "out": "plyr_d3_d7.png", "x": 19, "y": 51 },
+				{ "src": "PLAYD4D6.png", "out": "plyr_d4_d6.png", "x": 23, "y": 52 },
+				{ "src": "PLAYD5.png", "out": "plyr_d5.png", "x": 24, "y": 52 },
+				
+				{ "src": "PLAYE1.png", "out": "plyr_e1.png", "x": 11, "y": 54 },
+				{ "src": "PLAYE2E8.png", "out": "plyr_e2_e8.png", "x": 22, "y": 54 },
+				{ "src": "PLAYE3E7.png", "out": "plyr_e3_e7.png", "x": 30, "y": 54 },
+				{ "src": "PLAYE4E6.png", "out": "plyr_e4_e6.png", "x": 22, "y": 54 },
+				{ "src": "PLAYE5.png", "out": "plyr_e5.png", "x": 12, "y": 54 },
+				
+				{ "src": "PLAYF1.png", "out": "plyr_f1.png", "x": 11, "y": 54 },
+				{ "src": "PLAYF2F8.png", "out": "plyr_f2_f8.png", "x": 28, "y": 54 },
+				{ "src": "PLAYF3F7.png", "out": "plyr_f3_f7.png", "x": 37, "y": 54 },
+				{ "src": "PLAYF4F6.png", "out": "plyr_f4_f6.png", "x": 27, "y": 54 },
+				{ "src": "PLAYF5.png", "out": "plyr_f5.png", "x": 12, "y": 54 },
+				
+				{ "src": "PLAYG1.png", "out": "plyr_g1.png", "x": 20, "y": 52 },
+				{ "src": "PLAYG2G8.png", "out": "plyr_g2_g8.png", "x": 16, "y": 52 },
+				{ "src": "PLAYG3G7.png", "out": "plyr_g3_g7.png", "x": 21, "y": 52 },
+				{ "src": "PLAYG4G6.png", "out": "plyr_g4_g6.png", "x": 20, "y": 50 },
+				{ "src": "PLAYG5.png", "out": "plyr_g5.png", "x": 17, "y": 50 },
+		
+				{ "src": "PLAYH0.png", "out": "plyr_h0.png", "x": 19, "y": 47 },
+				{ "src": "PLAYI0.png", "out": "plyr_i0.png", "x": 9, "y": 42 },
+				{ "src": "PLAYJ0.png", "out": "plyr_j0.png", "x": 13, "y": 46 },
+				{ "src": "PLAYK0.png", "out": "plyr_k0.png", "x": 17, "y": 37 },
+				{ "src": "PLAYL0.png", "out": "plyr_l0.png", "x": 27, "y": 12 },
+				{ "src": "PLAYM0.png", "out": "plyr_m0.png", "x": 27, "y": 12 },
+				{ "src": "PLAYN0.png", "out": "plyr_n0.png", "x": 27, "y": 12 },
+		
+				{ "src": "PLAYO0.png", "out": "plyr_o0.png", "x": 16, "y": 53 },
+				{ "src": "PLAYP0.png", "out": "plyr_p0.png", "x": 20, "y": 50 },
+				{ "src": "PLAYQ0.png", "out": "plyr_q0.png", "x": 21, "y": 47 },
+				{ "src": "PLAYR0.png", "out": "plyr_r0.png", "x": 21, "y": 43 },
+				{ "src": "PLAYS0.png", "out": "plyr_s0.png", "x": 24, "y": 38 },
+				{ "src": "PLAYT0.png", "out": "plyr_t0.png", "x": 25, "y": 33 },
+				{ "src": "PLAYU0.png", "out": "plyr_u0.png", "x": 26, "y": 25 },
+				{ "src": "PLAYV0.png", "out": "plyr_v0.png", "x": 27, "y": 14 },
+				{ "src": "PLAYW0.png", "out": "plyr_w0.png", "x": 27, "y": 14 }		
+			]
+		}
+
+
+
+
 	]
 }

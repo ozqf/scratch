@@ -11,11 +11,10 @@ const jobs2 = [
 		y: 52
 	}
 ];
-const inputDir = "input";
-const outputDir = "output";
-const data = JSON.parse(fs.readFileSync(`input/jobs.json`, "utf-8"));
-const settings = data.settings;
-const jobs = data.jobs;
+const g_inputDir = "input";
+const g_outputDir = "output";
+const g_data = JSON.parse(fs.readFileSync(`input/jobs.json`, "utf-8"));
+const g_jobs = g_data.jobs;
 
 function fatal(err) {
 	console.error(err);
@@ -42,7 +41,7 @@ function fillChequer(image) {
 }
 
 function doJob(settings, job) {
-	Jimp.read(`${inputDir}/${job.src}`).then(img => {
+	Jimp.read(`${g_inputDir}/${settings.inputDir}/${job.src}`).then(img => {
 		const srcW = img.bitmap.width;
 		const srcH = img.bitmap.height;
 		const offX = job.x;
@@ -84,15 +83,20 @@ function doJob(settings, job) {
 				fillChequer(destImg);
 			}
 			destImg.blit(img, x, y);
-			destImg.writeAsync(`${outputDir}/${job.out}`);
+			destImg.writeAsync(`${g_outputDir}/${settings.outputDir}/${job.out}`);
 		});
 	}).catch(err => {
 		console.error(err);
 	});
 }
 
-const numJobs = jobs.length;
-console.log(`Read ${numJobs} jobs`);
+const numJobs = g_jobs.length;
+console.log(`Read ${numJobs} jobs\n`);
 for (let i = 0; i < numJobs; ++i) {
-	doJob(settings, jobs[i]);
+	let job = g_jobs[i];
+	let numItems = job.items.length;
+	console.log(`\tRead ${numItems} items`);
+	for (let j = 0; j < numItems; ++j) {
+		doJob(job.settings, job.items[j]);
+	}
 }

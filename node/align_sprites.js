@@ -2,19 +2,8 @@
 const process = require("process");
 const Jimp = require('jimp');
 const fs = require("fs");
-const jobs2 = [
-	{
-		//source: "C:\\Dropbox\\projects\\assets\\Freedoom_Sprites_Sorted\\Player\\PLAYA1.png",
-		src: "input\\PLAYA1.png",
-		out: "output\\player_a_1.png",
-		x: 22,
-		y: 52
-	}
-];
 const g_inputDir = "input";
 const g_outputDir = "output";
-const g_data = JSON.parse(fs.readFileSync(`input/jobs.json`, "utf-8"));
-const g_jobs = g_data.jobs;
 
 function fatal(err) {
 	console.error(err);
@@ -41,14 +30,15 @@ function fillChequer(image) {
 }
 
 function doJob(settings, job) {
-	Jimp.read(`${g_inputDir}/${settings.inputDir}/${job.src}`).then(img => {
+	Jimp
+		.read(`${g_inputDir}/${settings.inputDir}/${job.src}`)
+		.then(img => {
+			
 		const srcW = img.bitmap.width;
 		const srcH = img.bitmap.height;
 		const offX = job.x;
 		const offY = job.y;
-		console.log(`Read ${job.src} - ${srcW} by ${srcH} off ${offX} by ${offY}`);
-		// console.log(`\t${srcW} by ${srcH} pixels`);
-		// console.log(`\tAlignment: ${offX} by ${offY}`);
+		
 		let newW = offX * 2;
 		let newH = offY * 2; 
 		let x = 0, y = 0;
@@ -68,12 +58,7 @@ function doJob(settings, job) {
 			newH = offY * 2;
 			y = 0
 		}
-		/*
-		eg
-		41 by 56
-		22 by 52
-		*/
-		console.log(`Writing to ${job.out} (${newW} by ${newH} at ${x}, ${y})`);
+		console.log(`Read ${job.src} - ${srcW} by ${srcH} off ${offX} by ${offY} to ${job.out} (${newW} by ${newH} at ${x}, ${y})`);
 		let fillColour = 0x00000000;
 		if (settings.chequer_bg === true) {
 			fillColour = 0xffffffff
@@ -83,6 +68,9 @@ function doJob(settings, job) {
 				fillChequer(destImg);
 			}
 			destImg.blit(img, x, y);
+			if (job.flipX === true) {
+				destImg.flip(true, false);
+			}
 			destImg.writeAsync(`${g_outputDir}/${settings.outputDir}/${job.out}`);
 		});
 	}).catch(err => {
@@ -90,13 +78,26 @@ function doJob(settings, job) {
 	});
 }
 
-const numJobs = g_jobs.length;
-console.log(`Read ${numJobs} jobs\n`);
-for (let i = 0; i < numJobs; ++i) {
-	let job = g_jobs[i];
-	let numItems = job.items.length;
-	console.log(`\tRead ${numItems} items`);
-	for (let j = 0; j < numItems; ++j) {
-		doJob(job.settings, job.items[j]);
+function runJobsFile(fileName) {
+	if (!fileName.endsWith(`.json`)) {
+		fileName = `${fileName}.json`;
+	}
+
+	const data = JSON.parse(fs.readFileSync(`${g_inputDir}/${fileName}`, "utf-8"));
+	const jobs = data.jobs;
+
+	const numJobs = jobs.length;
+	console.log(`Read ${numJobs} jobs\n`);
+	for (let i = 0; i < numJobs; ++i) {
+		let job = jobs[i];
+		let numItems = job.items.length;
+		console.log(`\tRead ${numItems} items`);
+		for (let j = 0; j < numItems; ++j) {
+			doJob(job.settings, job.items[j]);
+		}
 	}
 }
+
+const g_numArgs = process.argv.length;
+console.log(`Args `, process.argv);
+runJobsFile(process.argv[g_numArgs - 1]);

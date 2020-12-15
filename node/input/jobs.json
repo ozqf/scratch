@@ -2,6 +2,7 @@
 	"jobs": [
 		{
 			"settings": {
+				"action": "offset",
 				"chequer_bg": true,
 				"inputDir": "player",
 				"outputDir": "player"

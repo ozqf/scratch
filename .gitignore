@@ -5,6 +5,7 @@
 /node/node_modules/
 /node/input/*
 !/node/input/jobs.json
+!/node/input/jobs_sheet_test.json
 /node/output/
 *.escn
 *.obj

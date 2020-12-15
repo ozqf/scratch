@@ -29,7 +29,7 @@ function fillChequer(image) {
 	}
 }
 
-function doJob(settings, job) {
+function doAlignItem(settings, job) {
 	Jimp
 		.read(`${g_inputDir}/${settings.inputDir}/${job.src}`)
 		.then(img => {
@@ -78,26 +78,67 @@ function doJob(settings, job) {
 	});
 }
 
+/////////////////////////////////////////////////
+// Realign action
+/////////////////////////////////////////////////
+function doOffsetJob(job) {
+	const numItems = job.items.length;
+	console.log(`\tRead ${numItems} items`);
+	for (let j = 0; j < numItems; ++j) {
+		doAlignItem(job.settings, job.items[j]);
+	}
+}
+
+/////////////////////////////////////////////////
+// Spritesheet action
+/////////////////////////////////////////////////
+function doSpritesheetJob(job) {
+	const frameX = job.settings.frameWidth;
+	const frameY = job.settings.frameHeight;
+	const sheetX = job.settings.sheetWidth;
+	const sheetY = job.settings.sheetHeight;
+	console.log(`Create sprite sheet.`);
+	console.log(`Frame size ${frameX}, ${frameY} total sheet space ${sheetX}, ${sheetY}`);
+
+}
+
+/////////////////////////////////////////////////
+// Define actions and read job file
+/////////////////////////////////////////////////
+const g_actions = [
+	{ name: "offset", fn: doOffsetJob },
+	{ name: "sheet", fn: doSpritesheetJob }
+];
+
+console.log(`${g_actions.length} actions`);
+
 function runJobsFile(fileName) {
 	if (!fileName.endsWith(`.json`)) {
 		fileName = `${fileName}.json`;
 	}
 
-	const data = JSON.parse(fs.readFileSync(`${g_inputDir}/${fileName}`, "utf-8"));
+	const path = `${g_inputDir}/${fileName}`;
+	console.log(`Reading jobs file "${path}"`);
+	const data = JSON.parse(fs.readFileSync(path, "utf-8"));
 	const jobs = data.jobs;
-
 	const numJobs = jobs.length;
 	console.log(`Read ${numJobs} jobs\n`);
+
 	for (let i = 0; i < numJobs; ++i) {
 		let job = jobs[i];
-		let numItems = job.items.length;
-		console.log(`\tRead ${numItems} items`);
-		for (let j = 0; j < numItems; ++j) {
-			doJob(job.settings, job.items[j]);
+		let action = g_actions.find(x => x.name === job.settings.action);
+		if (action) {
+			console.log(`Run action "${job.settings.action}" with ${job.items.length} items`);
+			action.fn(job);
+		}
+		else {
+			console.log(`Found no job action ${job.settings.action}`);
+			console.log(`Available actions are:`);
+			console.log(g_actions.map(x => x.name));
 		}
 	}
 }
 
 const g_numArgs = process.argv.length;
-console.log(`Args `, process.argv);
+//console.log(`Args `, process.argv);
 runJobsFile(process.argv[g_numArgs - 1]);

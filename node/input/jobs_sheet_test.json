@@ -6,25 +6,33 @@
 				"chequer_bg": true,
 				"inputDir": "player",
 				"outputDir": "player",
+				"fileName": "player_sheet.png",
 				"frameWidth": 64,
 				"frameHeight": 128,
 				"sheetWidth": 1024,
 				"sheetHeight": 1024
 			},
 			"items": [
-				{ "src": "PLAYA1.png", "out": "plyr_a1.png", "x": 22, "y": 52 },
-				{ "src": "PLAYA2A8.png", "out": "plyr_a2.png", "x": 16, "y": 52 },
-				{ "src": "PLAYA3A7.png", "out": "plyr_a3.png", "x": 21, "y": 50 },
-				{ "src": "PLAYA4A6.png", "out": "plyr_a4.png", "x": 23, "y": 49 },
-				{ "src": "PLAYA5.png", "out": "plyr_a5.png", "x": 24, "y": 53 },
-				{ "src": "PLAYA3A7.png", "out": "plyr_a7.png", "x": 21, "y": 50, "flipX": true },
-				{ "src": "PLAYA4A6.png", "out": "plyr_a6.png", "x": 23, "y": 49, "flipX": true },
-				{ "src": "PLAYA2A8.png", "out": "plyr_a8.png", "x": 16, "y": 52, "flipX": true }
+				{ "src": "PLAYA1.png", "x": 22, "y": 52, "fx": 0, "fy": 0 },
+				{ "src": "PLAYA2A8.png", "x": 16, "y": 52, "fx": 1, "fy": 0 },
+				{ "src": "PLAYA3A7.png", "x": 21, "y": 50, "fx": 2, "fy": 0 },
+				{ "src": "PLAYA4A6.png", "x": 23, "y": 49, "fx": 3, "fy": 0 },
+				{ "src": "PLAYA5.png", "x": 24, "y": 53, "fx": 4, "fy": 0 },
+				{ "src": "PLAYA4A6.png", "x": 23, "y": 49, "fx": 5, "fy": 0, "flipX": true },
+				{ "src": "PLAYA3A7.png", "x": 21, "y": 50, "fx": 6, "fy": 0, "flipX": true },
+				{ "src": "PLAYA2A8.png", "x": 16, "y": 52, "fx": 7, "fy": 0, "flipX": true },
+
+				
+				{ "src": "PLAYB1.png", "fx": 0, "fy": 1, "x": 19, "y": 53 },
+				{ "src": "PLAYB2B8.png", "fx": 1, "fy": 1, "x": 18, "y": 52 },
+				{ "src": "PLAYB3B7.png", "fx": 2, "fy": 1, "x": 19, "y": 52 },
+				{ "src": "PLAYB4B6.png", "fx": 3, "fy": 1, "x": 21, "y": 52 },
+				{ "src": "PLAYB5.png", "fx": 4, "fy": 1, "x": 20, "y": 53 },
+				{ "src": "PLAYB4B6.png", "fx": 5, "fy": 1, "x": 21, "y": 52, "flipX": true },
+				{ "src": "PLAYB3B7.png", "fx": 6, "fy": 1, "x": 19, "y": 52, "flipX": true },
+				{ "src": "PLAYB2B8.png", "fx": 7, "fy": 1, "x": 18, "y": 52, "flipX": true }
+				
 			]
 		}
-
-
-
-
 	]
 }

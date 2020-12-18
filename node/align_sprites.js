@@ -10,6 +10,12 @@ function fatal(err) {
 	process.exit(1);
 }
 
+function findNextPowerOfTwo(num) {
+	let val = 2;
+	while (val < num) { val *= 2; }
+	return val;
+}
+
 function fillChequer(image) {
 	let w = image.bitmap.width;
 	let h = image.bitmap.height;
@@ -92,14 +98,74 @@ function doOffsetJob(job) {
 /////////////////////////////////////////////////
 // Spritesheet action
 /////////////////////////////////////////////////
-function doSpritesheetJob(job) {
-	const frameX = job.settings.frameWidth;
-	const frameY = job.settings.frameHeight;
-	const sheetX = job.settings.sheetWidth;
-	const sheetY = job.settings.sheetHeight;
-	console.log(`Create sprite sheet.`);
-	console.log(`Frame size ${frameX}, ${frameY} total sheet space ${sheetX}, ${sheetY}`);
+function spriteSheetImagesLoaded(settings, items) {
+	let maxWidth = 0;
+	let maxHeight = 0;
+	let maxFrameX = 0;
+	let maxFrameY = 0;
+	let numItems = items.length;
+	for (let i = 0; i < numItems; ++i) {
+		let item = items[i];
+		let w = item.img.bitmap.width;
+		let h = item.img.bitmap.height;
+		if (w > maxWidth) {
+			maxWidth = w;
+		}
+		if (h > maxHeight) {
+			maxHeight = h;
+		}
+		if (item.fx > maxFrameX) {
+			maxFrameX = item.fx;
+		}
+		if (item.fy > maxFrameY) {
+			maxFrameY = item.fy;
+		}
+	}
+	let outputPath = `${g_outputDir}/${settings.outputDir}/${settings.fileName}`;
+	let frameSizeX = findNextPowerOfTwo(maxWidth);
+	let frameSizeY = findNextPowerOfTwo(maxHeight);
+	let canvasX = findNextPowerOfTwo((maxFrameX + 1) * frameSizeX);
+	let canvasY = findNextPowerOfTwo((maxFrameY + 1) * frameSizeY);
+	console.log(`Writing ${outputPath}`);
+	console.log(`Furthest frame positions: ${maxFrameX}, ${maxFrameY}`);
+	console.log(`Frame size: ${frameSizeX}, ${frameSizeY}`);
+	console.log(`Canvas size: ${canvasX}, ${canvasY}`);
+	// build canvas
+	let fillColour = 0x00000000;
+	new Jimp(canvasX, canvasY, fillColour, (err, destImg) => {
+		// blit
+		for (let i = 0; i < numItems; ++i) {
+			let item = items[i];
+			let x = item.fx * frameSizeX;
+			let y = item.fy * frameSizeY;
+			destImg.blit(item.img, x, y);
+		}
 
+		destImg.writeAsync(outputPath);
+	});
+	console.log(`\tDone.`);
+}
+
+function doSpritesheetJob(job) {
+	let numItems = job.items.length;
+	let count = 0;
+	for (let i = 0; i < numItems; ++i) {
+		let item = job.items[i];
+		let path = `${g_inputDir}/${job.settings.inputDir}/${item.src}`;
+		console.log(`Load ${path}`);
+		Jimp
+			.read(path)
+			.then(img => {
+				if (item.flipX) {
+					img.flip(true, false);
+				}
+				item.img = img;
+				count += 1;
+				if (count == numItems) {
+					spriteSheetImagesLoaded(job.settings, job.items);
+				}
+			})
+	}
 }
 
 /////////////////////////////////////////////////

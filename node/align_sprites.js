@@ -35,6 +35,16 @@ function fillChequer(image) {
 	}
 }
 
+function fillRect(image, startX, startY, w, h, colourHex) {
+	let endX = startX + w;
+	let endY = startY + h;
+	for (let y = startY; y < endY; ++y) {
+		for (let x = startX; x < endX; ++x) {
+			image.setPixelColor(colourHex, x, y);
+		}
+	}
+}
+
 function doAlignItem(settings, job) {
 	Jimp
 		.read(`${g_inputDir}/${settings.inputDir}/${job.src}`)
@@ -108,6 +118,9 @@ function spriteSheetImagesLoaded(settings, items) {
 		let item = items[i];
 		let w = item.img.bitmap.width;
 		let h = item.img.bitmap.height;
+		// TODO: Not taking into account the offset of
+		// the sprite. the offset may place the sprite
+		// off to one side, increasing the width!
 		if (w > maxWidth) {
 			maxWidth = w;
 		}
@@ -136,8 +149,29 @@ function spriteSheetImagesLoaded(settings, items) {
 		// blit
 		for (let i = 0; i < numItems; ++i) {
 			let item = items[i];
+
+			// chequer
+			if (settings.chequer_bg === true) {
+				let cx = item.fx * frameSizeX;
+				let cy = item.fy * frameSizeY;
+				let cw = frameSizeX / 2;
+				let ch = frameSizeY / 2;
+				fillRect(destImg, cx, cy, cw, ch, 0xff00ffff);
+				fillRect(destImg, cx + cw, cy + ch, cw, ch, 0xff00ffff);
+			}
+			
 			let x = item.fx * frameSizeX;
 			let y = item.fy * frameSizeY;
+			let w = item.img.bitmap.width;
+			let h = item.img.bitmap.height;
+			
+			let offX = (frameSizeX / 2) - (w - item.x);
+			// ignoring y offset for now, just place the sprite against
+			// the base of the frame for now
+			//let offY = (frameSizeY / 2) - (h - item.y);
+			x += offX;
+			y += frameSizeY - h;
+
 			destImg.blit(item.img, x, y);
 		}
 
@@ -152,7 +186,7 @@ function doSpritesheetJob(job) {
 	for (let i = 0; i < numItems; ++i) {
 		let item = job.items[i];
 		let path = `${g_inputDir}/${job.settings.inputDir}/${item.src}`;
-		console.log(`Load ${path}`);
+		//console.log(`Load ${path}`);
 		Jimp
 			.read(path)
 			.then(img => {

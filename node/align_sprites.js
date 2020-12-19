@@ -5,6 +5,9 @@ const fs = require("fs");
 const g_inputDir = "input";
 const g_outputDir = "output";
 
+/////////////////////////////////////////////////
+// Utility functions
+/////////////////////////////////////////////////
 function fatal(err) {
 	console.error(err);
 	process.exit(1);
@@ -51,6 +54,9 @@ function fillRect(image, startX, startY, w, h, colourHex) {
 	}
 }
 
+/////////////////////////////////////////////////
+// Realign action
+/////////////////////////////////////////////////
 function doAlignItem(settings, job) {
 	Jimp
 		.read(`${g_inputDir}/${settings.inputDir}/${job.src}`)
@@ -100,9 +106,6 @@ function doAlignItem(settings, job) {
 	});
 }
 
-/////////////////////////////////////////////////
-// Realign action
-/////////////////////////////////////////////////
 function doOffsetJob(job) {
 	const numItems = job.items.length;
 	console.log(`\tRead ${numItems} items`);
@@ -115,62 +118,57 @@ function doOffsetJob(job) {
 // Spritesheet action
 /////////////////////////////////////////////////
 function spriteSheetImagesLoaded(settings, items) {
+
+	// iterate canvas and calc required sizes for canvas and
+	// individual frames
 	let maxWidth = 0;
 	let maxHeight = 0;
 	let maxFrameX = 0;
 	let maxFrameY = 0;
-	let numItems = items.length;
+	const numItems = items.length;
 	for (let i = 0; i < numItems; ++i) {
-		let item = items[i];
+		const item = items[i];
 		let w = item.img.bitmap.width;
 		let h = item.img.bitmap.height;
-		let offX = item.x * 2;
+		// position offset may cause the required frame size
+		// to be larger than just the largest raw source image
+		// so check that here
+		const offX = item.x * 2;
 		if (offX > w) { w = offX; }
-		// TODO: Not taking into account the offset of
-		// the sprite. the offset may place the sprite
-		// off to one side, increasing the width!
-		if (w > maxWidth) {
-			maxWidth = w;
-		}
-		if (h > maxHeight) {
-			maxHeight = h;
-		}
-		if (item.fx > maxFrameX) {
-			maxFrameX = item.fx;
-		}
-		if (item.fy > maxFrameY) {
-			maxFrameY = item.fy;
-		}
+
+		if (w > maxWidth) { maxWidth = w; }
+		if (h > maxHeight) { maxHeight = h; }
+		if (item.fx > maxFrameX) { maxFrameX = item.fx; }
+		if (item.fy > maxFrameY) { maxFrameY = item.fy; }
 	}
-	let outputPath = `${g_outputDir}/${settings.outputDir}/${settings.fileName}`;
-	let frameSizeX = findNext32(maxWidth);
-	let frameSizeY = findNext32(maxHeight);
-	// let canvasX = findNextPowerOfTwo((maxFrameX + 1) * frameSizeX);
-	// let canvasY = findNextPowerOfTwo((maxFrameY + 1) * frameSizeY);
-	let canvasX = (maxFrameX + 1) * frameSizeX;
-	let canvasY = (maxFrameY + 1) * frameSizeY;
+	const outputPath = `${g_outputDir}/${settings.outputDir}/${settings.fileName}`;
+	const frameSizeX = findNext32(maxWidth);
+	const frameSizeY = findNext32(maxHeight);
+	const canvasX = (maxFrameX + 1) * frameSizeX;
+	const canvasY = (maxFrameY + 1) * frameSizeY;
 	console.log(`Writing ${outputPath}`);
-	console.log(`Furthest frame positions: ${maxFrameX}, ${maxFrameY}`);
+	console.log(`Furthest frame extents: ${maxFrameX}, ${maxFrameY}`);
 	console.log(`Frame size: ${frameSizeX}, ${frameSizeY}`);
 	console.log(`Canvas size: ${canvasX}, ${canvasY}`);
+
 	// build canvas
-	let fillColour = 0x00000000;
+	const fillColour = 0x00000000;
 	new Jimp(canvasX, canvasY, fillColour, (err, destImg) => {
-		// blit
+		// blit items to canvas
 		for (let i = 0; i < numItems; ++i) {
-			let item = items[i];
+			const item = items[i];
 
 			// chequer
 			if (settings.chequer_bg === true) {
-				let cx = item.fx * frameSizeX;
-				let cy = item.fy * frameSizeY;
-				let cw = frameSizeX / 2;
-				let ch = frameSizeY / 2;
+				const cx = item.fx * frameSizeX;
+				const cy = item.fy * frameSizeY;
+				const cw = frameSizeX / 2;
+				const ch = frameSizeY / 2;
 				fillRect(destImg, cx, cy, cw, ch, 0xff00ffff);
 				fillRect(destImg, cx + cw, cy + ch, cw, ch, 0xff00ffff);
 			}
-			let srcWidth = item.img.bitmap.width;
-			let srcHeight = item.img.bitmap.height;
+			const srcWidth = item.img.bitmap.width;
+			const srcHeight = item.img.bitmap.height;
 			const cellX = item.fx * frameSizeX;
 			const cellY = item.fy * frameSizeY;
 			let drawX, drawY;
@@ -179,6 +177,8 @@ function spriteSheetImagesLoaded(settings, items) {
 			// we are assuming sprites will be set on the floor.
 			switch (settings.offsetMode) {
 				case 1: {
+					// TODO: Older janky calc. remove when happy
+					// with replacement
 					drawX = cellX;
 					drawY = cellY;
 					let offX = (frameSizeX / 2) - (srcWidth - item.x);
@@ -206,11 +206,11 @@ function spriteSheetImagesLoaded(settings, items) {
 }
 
 function doSpritesheetJob(job) {
-	let numItems = job.items.length;
+	const numItems = job.items.length;
 	let count = 0;
 	for (let i = 0; i < numItems; ++i) {
-		let item = job.items[i];
-		let path = `${g_inputDir}/${job.settings.inputDir}/${item.src}`;
+		const item = job.items[i];
+		const path = `${g_inputDir}/${job.settings.inputDir}/${item.src}`;
 		//console.log(`Load ${path}`);
 		Jimp
 			.read(path)
@@ -250,8 +250,8 @@ function runJobsFile(fileName) {
 	console.log(`Read ${numJobs} jobs\n`);
 
 	for (let i = 0; i < numJobs; ++i) {
-		let job = jobs[i];
-		let action = g_actions.find(x => x.name === job.settings.action);
+		const job = jobs[i];
+		const action = g_actions.find(x => x.name === job.settings.action);
 		if (action) {
 			console.log(`Run action "${job.settings.action}" with ${job.items.length} items`);
 			action.fn(job);

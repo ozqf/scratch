@@ -16,6 +16,12 @@ function findNextPowerOfTwo(num) {
 	return val;
 }
 
+function findNext32(num) {
+	let val = 32;
+	while (val < num) { val += 32; }
+	return val;
+}
+
 function fillChequer(image) {
 	let w = image.bitmap.width;
 	let h = image.bitmap.height;
@@ -118,6 +124,8 @@ function spriteSheetImagesLoaded(settings, items) {
 		let item = items[i];
 		let w = item.img.bitmap.width;
 		let h = item.img.bitmap.height;
+		let offX = item.x * 2;
+		if (offX > w) { w = offX; }
 		// TODO: Not taking into account the offset of
 		// the sprite. the offset may place the sprite
 		// off to one side, increasing the width!
@@ -135,10 +143,12 @@ function spriteSheetImagesLoaded(settings, items) {
 		}
 	}
 	let outputPath = `${g_outputDir}/${settings.outputDir}/${settings.fileName}`;
-	let frameSizeX = findNextPowerOfTwo(maxWidth);
-	let frameSizeY = findNextPowerOfTwo(maxHeight);
-	let canvasX = findNextPowerOfTwo((maxFrameX + 1) * frameSizeX);
-	let canvasY = findNextPowerOfTwo((maxFrameY + 1) * frameSizeY);
+	let frameSizeX = findNext32(maxWidth);
+	let frameSizeY = findNext32(maxHeight);
+	// let canvasX = findNextPowerOfTwo((maxFrameX + 1) * frameSizeX);
+	// let canvasY = findNextPowerOfTwo((maxFrameY + 1) * frameSizeY);
+	let canvasX = (maxFrameX + 1) * frameSizeX;
+	let canvasY = (maxFrameY + 1) * frameSizeY;
 	console.log(`Writing ${outputPath}`);
 	console.log(`Furthest frame positions: ${maxFrameX}, ${maxFrameY}`);
 	console.log(`Frame size: ${frameSizeX}, ${frameSizeY}`);
@@ -159,20 +169,35 @@ function spriteSheetImagesLoaded(settings, items) {
 				fillRect(destImg, cx, cy, cw, ch, 0xff00ffff);
 				fillRect(destImg, cx + cw, cy + ch, cw, ch, 0xff00ffff);
 			}
+			let srcWidth = item.img.bitmap.width;
+			let srcHeight = item.img.bitmap.height;
+			const cellX = item.fx * frameSizeX;
+			const cellY = item.fy * frameSizeY;
+			let drawX, drawY;
+			// mostly ignoring y offset for now, just place the
+			// sprite against the base of the frame.
+			// we are assuming sprites will be set on the floor.
+			switch (settings.offsetMode) {
+				case 1: {
+					drawX = cellX;
+					drawY = cellY;
+					let offX = (frameSizeX / 2) - (srcWidth - item.x);
+					drawX += offX;
+					drawY += frameSizeY - srcHeight;
+				} break;
+				default: {
+					// draw from centre bottom of frame, and offset
+					// up and left:
+					let itemX = item.x;
+					if (item.flipX === true) {
+						itemX = srcWidth - itemX;
+					}
+					drawX = cellX + (frameSizeX / 2) - itemX;
+					drawY = cellY + (frameSizeY - srcHeight);
+				} break;
+			}
 			
-			let x = item.fx * frameSizeX;
-			let y = item.fy * frameSizeY;
-			let w = item.img.bitmap.width;
-			let h = item.img.bitmap.height;
-			
-			let offX = (frameSizeX / 2) - (w - item.x);
-			// ignoring y offset for now, just place the sprite against
-			// the base of the frame for now
-			//let offY = (frameSizeY / 2) - (h - item.y);
-			x += offX;
-			y += frameSizeY - h;
-
-			destImg.blit(item.img, x, y);
+			destImg.blit(item.img, drawX, drawY);
 		}
 
 		destImg.writeAsync(outputPath);
@@ -198,7 +223,7 @@ function doSpritesheetJob(job) {
 				if (count == numItems) {
 					spriteSheetImagesLoaded(job.settings, job.items);
 				}
-			})
+			});
 	}
 }
 

@@ -6,7 +6,8 @@
 				"chequer_bg": true,
 				"inputDir": "player",
 				"outputDir": "player",
-				"fileName": "player_test_sheet.png"
+				"fileName": "player_test_sheet.png",
+				"offsetMode": 0
 			},
 			"items": [
 				{ "src": "PLAYA1.png", "x": 22, "y": 52, "fx": 0, "fy": 0 },
@@ -15,9 +16,11 @@
 				{ "src": "PLAYB1.png", "fx": 0, "fy": 1, "x": 19, "y": 53 },
 				{ "src": "PLAYB2B8.png", "fx": 1, "fy": 1, "x": 18, "y": 52 },
 
+				{ "src": "PLAYF3F7.png", "fx": 0, "fy": 2, "x": 37, "y": 54 },
+				{ "src": "PLAYF3F7.png", "fx": 1, "fy": 2, "x": 37, "y": 54, "flipX": true },
 
-				{ "src": "PLAYM0.png", "fx": 0, "fy": 2, "x": 27, "y": 12 },
-				{ "src": "PLAYN0.png", "fx": 1, "fy": 2, "x": 27, "y": 12 }
+				{ "src": "PLAYM0.png", "fx": 0, "fy": 3, "x": 27, "y": 12 },
+				{ "src": "PLAYN0.png", "fx": 1, "fy": 3, "x": 27, "y": 12 }
 			]
 		}
 	]

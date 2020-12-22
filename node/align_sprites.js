@@ -211,7 +211,6 @@ function doSpritesheetJob(job) {
 	for (let i = 0; i < numItems; ++i) {
 		const item = job.items[i];
 		const path = `${g_inputDir}/${job.settings.inputDir}/${item.src}`;
-		//console.log(`Load ${path}`);
 		Jimp
 			.read(path)
 			.then(img => {
@@ -228,11 +227,132 @@ function doSpritesheetJob(job) {
 }
 
 /////////////////////////////////////////////////
+// Scan and generate a palette png from
+// the source image
+/////////////////////////////////////////////////
+function checkBias(colour, biasStr) {
+	switch (biasStr) {
+		case "blue": {
+			const r = ((colour >> 24) & 255);
+			const g = ((colour >> 16) & 255);
+			const b = ((colour >> 8) & 255);
+			return (b > g && b > r);
+		}	
+		case "red": {
+			const r = ((colour >> 24) & 255);
+			const g = ((colour >> 16) & 255);
+			const b = ((colour >> 8) & 255);
+			return (r > g && r > b);
+		}
+		case "green": {
+			const r = ((colour >> 24) & 255);
+			const g = ((colour >> 16) & 255);
+			const b = ((colour >> 8) & 255);
+			return (g > r && g > b);
+		}
+		default:
+		return true;
+	}
+}
+
+function doPaletteScan(job) {
+	const path = job.settings.input;
+	const outputPath = job.settings.output;
+	const bias = job.settings.bias;
+	const area = job.settings.area;
+	console.log(`Scanning palette from "${path}" into "${outputPath}" - bias: ${bias}`);
+	Jimp
+		.read(path)
+		.then(img => {
+			let colours = [];
+			let x = 0;
+			let y = 0;
+			let w = img.bitmap.width;
+			let h = img.bitmap.height;
+			if (area) {
+				x = area.x;
+				y = area.y;
+				w = area.w;
+				h = area.h;
+			}
+			for (y = 0; y < h; ++y) {
+				for (x = 0; x < w; ++x) {
+					let colour = img.getPixelColor(x, y);
+					if (!bias || checkBias(colour, bias)) {
+						if (colours.indexOf(colour) === -1) {
+							colours.push(colour);
+						}
+					}
+				}
+			}
+			const numColours = colours.length
+			console.log(`Found ${numColours} colours`);
+			// dump colours to console:
+			//console.log(colours.map(c => c.toString(16)).join(", "));
+			const fillColour = 0x00000000;
+			new Jimp(2, numColours, fillColour, (err, destImg) => {
+				let x = 0;
+				for (let y = 0; y < numColours; ++y) {
+					destImg.setPixelColor(colours[y], x, y);
+				}
+				destImg.writeAsync(outputPath);
+			});
+		});
+}
+
+/////////////////////////////////////////////////
+// Palette swap job
+/////////////////////////////////////////////////
+function checkPixelSwap(img, x, y, colours) {
+	let current = img.getPixelColor(x, y);
+	let swap = colours.find(c => c.a === current);
+	if (swap) {
+		img.setPixelColor(swap.b, x, y);
+	}
+}
+
+function doPaletteSwap(job) {
+	const inputPath = job.settings.input;
+	const outputPath = job.settings.output;
+	const palettePath = job.settings.palette;
+	console.log(`Palette swap`);
+	console.log(`in "${inputPath}" out "${outputPath}"`);
+	console.log(`swap table ${palettePath}`);
+	Jimp
+		.read(palettePath)
+		.then(paletteImg => {
+			let palW = paletteImg.bitmap.width;
+			let palH = paletteImg.bitmap.height;
+			let colours = [];
+			for (let y = 0; y < palH; ++y) {
+				colours.push({
+					a: paletteImg.getPixelColor(0, y),
+					b: paletteImg.getPixelColor(1, y)
+				});
+			}
+			Jimp
+				.read(inputPath)
+				.then(img => {
+					const w = img.bitmap.width;
+					const h = img.bitmap.height;
+					for (let y = 0; y < h; ++y) {
+						for (let x = 0; x < w; ++x) {
+							checkPixelSwap(img, x, y, colours);
+						}
+					}
+					img.writeAsync(outputPath);
+				});
+		});
+}
+
+/////////////////////////////////////////////////
 // Define actions and read job file
 /////////////////////////////////////////////////
 const g_actions = [
 	{ name: "offset", fn: doOffsetJob },
-	{ name: "sheet", fn: doSpritesheetJob }
+	{ name: "sheet", fn: doSpritesheetJob },
+	{ name: "palette_scan", fn: doPaletteScan },
+	{ name: "palette_swap", fn: doPaletteSwap }
 ];
 
 console.log(`${g_actions.length} actions`);
@@ -253,7 +373,7 @@ function runJobsFile(fileName) {
 		const job = jobs[i];
 		const action = g_actions.find(x => x.name === job.settings.action);
 		if (action) {
-			console.log(`Run action "${job.settings.action}" with ${job.items.length} items`);
+			console.log(`Run action "${job.settings.action}"`);
 			action.fn(job);
 		}
 		else {

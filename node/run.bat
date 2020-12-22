@@ -1,0 +1,2 @@
+node sprites_txt_to_json
+node align_sprites spritesheet_jobs

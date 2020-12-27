@@ -230,25 +230,41 @@ function doSpritesheetJob(job) {
 // Scan and generate a palette png from
 // the source image
 /////////////////////////////////////////////////
-function checkBias(colour, biasStr) {
+
+function checkBias(colour, biasStr, mode) {
 	switch (biasStr) {
 		case "blue": {
 			const r = ((colour >> 24) & 255);
 			const g = ((colour >> 16) & 255);
 			const b = ((colour >> 8) & 255);
-			return (b > g && b > r);
+			switch (mode) {
+				case 1:
+					return (b > r + g);
+				default:
+					return (b > g && b > r);
+			}
 		}	
 		case "red": {
 			const r = ((colour >> 24) & 255);
 			const g = ((colour >> 16) & 255);
 			const b = ((colour >> 8) & 255);
-			return (r > g && r > b);
+			switch (mode) {
+				case 1:
+					return (r > g + b);
+				default:
+					return (r > g && r > b);
+			}
 		}
 		case "green": {
 			const r = ((colour >> 24) & 255);
 			const g = ((colour >> 16) & 255);
 			const b = ((colour >> 8) & 255);
-			return (g > r && g > b);
+			switch (mode) {
+				case 1:
+					return (g > r + b);
+				default:
+					return (g > r && g > b);
+			}
 		}
 		default:
 		return true;
@@ -278,7 +294,7 @@ function doPaletteScan(job) {
 			for (y = 0; y < h; ++y) {
 				for (x = 0; x < w; ++x) {
 					let colour = img.getPixelColor(x, y);
-					if (!bias || checkBias(colour, bias)) {
+					if (!bias || checkBias(colour, bias, 0)) {
 						if (colours.indexOf(colour) === -1) {
 							colours.push(colour);
 						}
@@ -304,8 +320,8 @@ function doPaletteScan(job) {
 // Palette swap job
 /////////////////////////////////////////////////
 function checkPixelSwap(img, x, y, colours) {
-	let current = img.getPixelColor(x, y);
-	let swap = colours.find(c => c.a === current);
+	const current = img.getPixelColor(x, y);
+	const swap = colours.find(c => c.a === current);
 	if (swap) {
 		img.setPixelColor(swap.b, x, y);
 	}
@@ -321,8 +337,8 @@ function doPaletteSwap(job) {
 	Jimp
 		.read(palettePath)
 		.then(paletteImg => {
-			let palW = paletteImg.bitmap.width;
-			let palH = paletteImg.bitmap.height;
+			const palW = paletteImg.bitmap.width;
+			const palH = paletteImg.bitmap.height;
 			let colours = [];
 			for (let y = 0; y < palH; ++y) {
 				colours.push({
@@ -346,13 +362,40 @@ function doPaletteSwap(job) {
 }
 
 /////////////////////////////////////////////////
+// create palette mask
+/////////////////////////////////////////////////
+function doCreatePaletteMask(job) {
+	const inputPath = job.settings.input;
+	const outputPath = job.settings.output;
+	const bias = job.settings.bias;
+	if (!bias) {
+		throw `Bias not specified.`;
+	}
+	Jimp.read(inputPath)
+		.then(img => {
+			const w = img.bitmap.width;
+			const h = img.bitmap.height;
+			for (let y = 0; y < h; ++y) {
+				for (let x = 0; x < w; ++x) {
+					const colour = img.getPixelColor(x, y);
+					if (!checkBias(colour, bias, 1)) {
+						img.setPixelColor(0x00000000, x, y);
+					}
+				}
+			}
+			img.writeAsync(outputPath);
+		});
+}
+
+/////////////////////////////////////////////////
 // Define actions and read job file
 /////////////////////////////////////////////////
 const g_actions = [
 	{ name: "offset", fn: doOffsetJob },
 	{ name: "sheet", fn: doSpritesheetJob },
 	{ name: "palette_scan", fn: doPaletteScan },
-	{ name: "palette_swap", fn: doPaletteSwap }
+	{ name: "palette_swap", fn: doPaletteSwap },
+	{ name: "palette_mask", fn: doCreatePaletteMask }
 ];
 
 console.log(`${g_actions.length} actions`);

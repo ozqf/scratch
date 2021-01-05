@@ -143,7 +143,7 @@ SPOSA1.png 0 0 17 50
 SPOSA2A8.png 1 0 15 50
 SPOSA3A7.png 2 0 17 48
 SPOSA4A6.png 3 0 22 45
-SPOSA1.png 4 0 17 46
+SPOSA5.png 4 0 17 46
 SPOSA4A6.png 5 0 22 45 flipX
 SPOSA3A7.png 6 0 17 48 flipX
 SPOSA2A8.png 7 0 15 50 flipX
@@ -152,7 +152,7 @@ SPOSB1.png 0 1 17 50
 SPOSB2B8.png 1 1 13 50
 SPOSB3B7.png 2 1 16 52
 SPOSB4B6.png 3 1 20 49
-SPOSB1.png 4 1 17 49
+SPOSB5.png 4 1 17 49
 SPOSB4B6.png 5 1 20 49 flipX
 SPOSB3B7.png 6 1 16 52 flipX
 SPOSB2B8.png 7 1 13 50 flipX
@@ -161,7 +161,7 @@ SPOSC1.png 0 2 16 51
 SPOSC2C8.png 1 2 14 50
 SPOSC3C7.png 2 2 19 51
 SPOSC4C6.png 3 2 19 49
-SPOSC1.png 4 2 17 50
+SPOSC5.png 4 2 17 50
 SPOSC4C6.png 5 2 19 49 flipX
 SPOSC3C7.png 6 2 19 51 flipX
 SPOSC2C8.png 7 2 14 50 flipX
@@ -170,7 +170,7 @@ SPOSD1.png 0 3 17 51
 SPOSD2D8.png 1 3 13 51
 SPOSD3D7.png 2 3 15 51
 SPOSD4D6.png 3 3 18 50
-SPOSD1.png 4 3 17 49
+SPOSD5.png 4 3 17 49
 SPOSD4D6.png 5 3 18 50 flipX
 SPOSD3D7.png 6 3 15 51 flipX
 SPOSD2D8.png 7 3 13 51 flipX
@@ -179,7 +179,7 @@ SPOSE1.png 0 4 9 51
 SPOSE2E8.png 1 4 24 50
 SPOSE3E7.png 2 4 28 50
 SPOSE4E6.png 3 4 20 50
-SPOSE1.png 4 4 13 50
+SPOSE5.png 4 4 13 50
 SPOSE4E6.png 5 4 20 50 flipX
 SPOSE3E7.png 6 4 28 50 flipX
 SPOSE2E8.png 7 4 24 50 flipX
@@ -188,7 +188,7 @@ SPOSF1.png 0 5 11 51
 SPOSF2F8.png 1 5 29 52
 SPOSF3F7.png 2 5 33 50
 SPOSF4F6.png 3 5 22 50
-SPOSF1.png 4 5 12 50
+SPOSF5.png 4 5 12 50
 SPOSF4F6.png 5 5 22 50 flipX
 SPOSF3F7.png 6 5 33 50 flipX
 SPOSF2F8.png 7 5 29 52 flipX
@@ -197,7 +197,7 @@ SPOSG1.png 0 6 16 50
 SPOSG2G8.png 1 6 16 49
 SPOSG3G7.png 2 6 21 48
 SPOSG4G6.png 3 6 17 47
-SPOSG1.png 4 6 17 49
+SPOSG5.png 4 6 17 49
 SPOSG4G6.png 5 6 17 47 flipX
 SPOSG3G7.png 6 6 21 48 flipX
 SPOSG2G8.png 7 6 16 49 flipX
@@ -364,4 +364,279 @@ TROOS0.png 5 9 29 32
 TROOT0.png 6 9 29 22
 TROOU0.png 7 9 29 7
 
+@@ golem_sheet.png golem
 
+fatta1.png 0 0 39 60
+fatta2a8.png 1 0 39 61
+fatta3a7.png 2 0 38 60
+fatta4a6.png 3 0 39 57
+fatta5.png 4 0 39 59
+fatta4a6.png 5 0 39 57 flipX
+fatta2a8.png 6 0 39 61 flipX
+fatta3a7.png 7 0 38 60 flipX
+
+fattb1.png 0 1 43 65
+fattb2b8.png 1 1 43 65
+fattb3b7.png 2 1 43 61
+fattb4b6.png 3 1 42 61
+fattb5.png 4 1 43 58
+fattb3b7.png 5 1 43 61 flipX
+fattb2b8.png 6 1 43 65 flipX
+fattb4b6.png 7 1 42 61 flipX
+
+fattc1.png 0 2 43 65
+fattc2c8.png 1 2 43 63
+fattc3c7.png 2 2 39 61
+fattc4c6.png 3 2 35 61
+fattc5.png 4 2 36 58
+fattc4c6.png 5 2 35 61 flipX
+fattc3c7.png 6 2 39 61 flipX
+fattc2c8.png 7 2 43 63 flipX
+
+fattd1.png 0 3 38 60
+fattd2d8.png 1 3 43 63
+fattd3d7.png 2 3 43 62
+fattd4d6.png 3 3 43 59
+fattd5.png 4 3 35 58
+fattd4d6.png 5 3 43 59 flipX
+fattd3d7.png 6 3 43 62 flipX
+fattd2d8.png 7 3 43 63 flipX
+
+fatte1.png 0 4 43 65
+fatte2e8.png 1 4 43 61
+fatte3e7.png 2 4 43 62
+fatte4e6.png 3 4 43 58
+fatte5.png 4 4 40 57
+fatte4e6.png 5 4 43 58 flipX
+fatte3e7.png 6 4 43 62 flipX
+fatte2e8.png 7 4 43 61 flipX
+
+fattf1.png 0 5 42 65
+fattf2f8.png 1 5 43 62
+fattf3f7.png 2 5 43 61
+fattf4f6.png 3 5 43 59
+fattf5.png 4 5 39 58
+fattf4f6.png 5 5 43 59 flipX
+fattf3f7.png 6 5 43 61 flipX
+fattf2f8.png 7 5 43 62 flipX
+
+fattg1.png 0 6 42 60
+fattg2g8.png 1 6 51 59
+fattg3g7.png 2 6 43 60
+fattg4g6.png 3 6 43 62
+fattg5.png 4 6 42 61
+fattg4g6.png 5 6 43 62 flipX
+fattg3g7.png 6 6 43 60 flipX
+fattg2g8.png 7 6 51 59 flipX
+
+fatth1.png 0 7 42 60
+fatth2h8.png 1 7 50 59
+fatth3h7.png 2 7 33 61
+fatth4h6.png 3 7 42 61
+fatth5.png 4 7 42 60
+fatth4h6.png 5 7 42 61 flipX
+fatth3h7.png 6 7 33 61 flipX
+fatth2h8.png 7 7 50 59 flipX
+
+fatti1.png 0 8 42 63
+fatti2i8.png 1 8 51 64
+fatti3i7.png 2 8 43 59
+fatti4i6.png 3 8 42 63
+fatti5.png 4 8 39 59
+fatti4i6.png 5 8 42 63 flipX
+fatti3i7.png 6 8 43 59 flipX
+fatti2i8.png 7 8 51 64 flipX
+
+fattj1.png 0 9 32 62
+fattj2.png 1 9 47 62
+fattj3.png 2 9 39 59
+fattj4.png 3 9 30 61
+fattj5.png 4 9 32 59
+fattj6.png 5 9 29 61
+fattj7.png 6 9 37 59
+fattj8.png 7 9 46 62
+
+fattk0.png 0 10 50 73
+fattl0.png 1 10 50 75
+fattm0.png 2 10 45 66
+fattn0.png 3 10 37 53
+fatto0.png 4 10 35 41
+fattp0.png 5 10 36 40
+fattq0.png 6 10 36 39
+fattr0.png 7 10 36 39
+fatts0.png 8 10 36 38
+fattt0.png 9 10 36 36
+
+@@ spider_sheet.png spider_cannon
+
+BSPIA1D1.png 0 0 64 49
+BSPIA2A8.png 1 0 64 49
+BSPIA3A7.png 2 0 64 49
+BSPIA4A6.png 3 0 64 49
+BSPIA5D5.png 4 0 64 49
+BSPIA4A6.png 5 0 64 49 flipX
+BSPIA3A7.png 6 0 64 49 flipX
+BSPIA2A8.png 7 0 64 49 flipX
+
+BSPIB1E1.png 0 1 64 49
+BSPIB2B8.png 1 1 64 49
+BSPIB3B7.png 2 1 64 49
+BSPIB4B6.png 3 1 64 49
+BSPIB5E5.png 4 1 64 49
+BSPIB4B6.png 5 1 64 49 flipX
+BSPIB3B7.png 6 1 64 49 flipX
+BSPIB2B8.png 7 1 64 49 flipX
+
+BSPIC1F1.png 0 2 64 49
+BSPIC2C8.png 1 2 64 49
+BSPIC3C7.png 2 2 64 49
+BSPIC4C6.png 3 2 64 49
+BSPIC5F5.png 4 2 64 49
+BSPIC4C6.png 5 2 64 49 flipX
+BSPIC3C7.png 6 2 64 49 flipX
+BSPIC2C8.png 7 2 64 49 flipX
+
+BSPIA1D1.png 0 3 64 49
+BSPID2D8.png 1 3 64 49
+BSPID3D7.png 2 3 64 49
+BSPID4D6.png 3 3 64 49
+BSPIA5D5.png 4 3 64 49
+BSPID4D6.png 5 3 64 49 flipX
+BSPID3D7.png 6 3 64 49 flipX
+BSPID2D8.png 7 3 64 49 flipX
+
+BSPIB1E1.png 0 4 64 49
+BSPIE2E8.png 1 4 64 49
+BSPIE3E7.png 2 4 64 49
+BSPIE4E6.png 3 4 64 49
+BSPIB5E5.png 4 4 64 49
+BSPIE4E6.png 5 4 64 49 flipX
+BSPIE3E7.png 6 4 64 49 flipX
+BSPIE2E8.png 7 4 64 49 flipX
+
+BSPIC1F1.png 0 5 64 49
+BSPIF2F8.png 1 5 64 49
+BSPIF3F7.png 2 5 64 49
+BSPIF4F6.png 3 5 64 49
+BSPIC5F5.png 4 5 64 49
+BSPIF4F6.png 5 5 64 49
+BSPIF3F7.png 6 5 64 49
+BSPIF2F8.png 7 5 64 49
+
+BSPIG1.png 0 6 64 49
+BSPIG2G8.png 1 6 64 49
+BSPIG3G7.png 2 6 64 49
+BSPIG4G6.png 3 6 64 49
+BSPIG5.png 4 6 64 49
+BSPIG4G6.png 5 6 64 49 flipX
+BSPIG3G7.png 6 6 64 49 flipX
+BSPIG2G8.png 7 6 64 49 flipX
+
+BSPIH1.png 0 7 64 49
+BSPIH2H8.png 1 7 64 49
+BSPIH3H7.png 2 7 64 49
+BSPIH4H6.png 3 7 64 49
+BSPIH5.png 4 7 64 49
+BSPIH4H6.png 5 7 64 49 flipX
+BSPIH3H7.png 6 7 64 49 flipX
+BSPIH2H8.png 7 7 64 49 flipX
+
+BSPII1.png 0 8 64 49
+BSPII2I8.png 1 8 64 49
+BSPII3I7.png 2 8 64 49
+BSPII4I6.png 3 8 64 49
+BSPII5.png 4 8 64 49
+BSPII4I6.png 5 8 64 49 flipX
+BSPII3I7.png 6 8 64 49 flipX
+BSPII2I8.png 7 8 64 49 flipX
+
+BSPIJ0.png 0 9 64 49
+BSPIK0.png 1 9 64 49
+BSPIL0.png 2 9 64 49
+BSPIM0.png 3 9 64 49
+BSPIN0.png 4 9 64 49
+BSPIO0.png 5 9 64 49
+BSPIP0.png 6 9 64 49
+
+@@ psychic_sheet.png vile
+
+VILEA1D1.png 0 0 20 73
+VILEA2D8.png 1 0 26 73
+VILEA3D7.png 2 0 28 72
+VILEA4D6.png 3 0 24 72
+VILEA5D5.png 4 0 22 73
+VILEA6D4.png 5 0 25 72
+VILEA7D3.png 6 0 27 72
+VILEA8D2.png 7 0 23 73
+
+VILEB1E1.png 0 1 23 72
+VILEB2E8.png 1 1 21 75
+VILEB3E7.png 2 1 28 75
+VILEB4E6.png 3 1 22 74
+VILEB5E5.png 4 1 23 72
+VILEB6E4.png 5 1 22 74
+VILEB7E3.png 6 1 28 74
+VILEB8E2.png 7 1 22 72
+
+VILEC1F1.png 0 2 27 72
+VILEC2F8.png 1 2 22 73
+VILEC3F7.png 2 2 21 75
+VILEC4F6.png 3 2 20 73
+VILEC5F5.png 4 2 23 72
+VILEC6F4.png 5 2 21 73
+VILEC7F3.png 6 2 21 72
+VILEC8F2.png 7 2 22 74
+
+VILEA1D1.png 0 3 20 73 flipX
+VILEA8D2.png 1 3 23 73 flipX
+VILEA7D3.png 2 3 27 72 flipX
+VILEA6D4.png 3 3 25 72 flipX
+VILEA5D5.png 4 3 22 73 flipX
+VILEA4D6.png 5 3 24 72 flipX
+VILEA3D7.png 6 3 28 72 flipX
+VILEA2D8.png 7 3 26 73 flipX
+
+VILEB1E1.png 0 4 23 72 flipX
+VILEB8E2.png 1 4 22 72 flipX
+VILEB7E3.png 2 4 28 74 flipX
+VILEB6E4.png 3 4 22 74 flipX
+VILEB5E5.png 4 4 23 72 flipX
+VILEB4E6.png 5 4 22 74 flipX
+VILEB3E7.png 6 4 28 75 flipX
+VILEB2E8.png 7 4 21 75 flipX
+
+VILEC1F1.png 0 5 27 72 flipX
+VILEC8F2.png 1 5 22 74 flipX
+VILEC7F3.png 2 5 21 72 flipX
+VILEC6F4.png 3 5 21 73 flipX
+VILEC5F5.png 4 5 23 72 flipX
+VILEC4F6.png 5 5 20 73 flipX
+VILEC3F7.png 6 5 21 75 flipX
+VILEC2F8.png 7 5 22 73 flipX
+
+
+VILEG1.png 0 6 36 91
+VILEH1.png 1 6 44 109
+VILEI1.png 2 6 44 109
+VILEJ1.png 3 6 44 109
+VILEK1.png 4 6 44 109
+VILEL1.png 5 6 34 108
+VILEM1.png 6 6 34 108
+VILEN1.png 7 6 42 99
+VILEO1.png 8 6 42 99
+VILEP1.png 9 6 42 99
+VILEPP1.png 10 6 44 109
+VILEPPP1.png 11 6 44 109
+VILEPPPP1.png 12 6 44 109
+
+VILEQ1.png 0 7 26 73
+
+VILER0.png 0 8 28 74
+VILES0.png 1 8 31 78
+VILET0.png 2 8 33 81
+VILEU0.png 3 8 37 78
+VILEV0.png 4 8 39 75
+VILEW0.png 5 8 45 69
+VILEX0.png 6 8 46 70
+VILEY0.png 7 8 45 37
+VILEZ0.png 8 8 45 37

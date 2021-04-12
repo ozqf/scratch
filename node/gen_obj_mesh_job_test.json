@@ -1,0 +1,13 @@
+{
+	"outputPath": "./zqf_auto/mesh/",
+	"textureResolution": 128,
+	"pixelsPerMetre": 128,
+	"batches": [
+		{
+			"name": "beam",
+			"sizes": [
+				[ 2, 2, 8 ]
+			]
+		}
+	]
+}

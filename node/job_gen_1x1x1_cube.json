@@ -1,0 +1,13 @@
+{
+	"outputPath": "./zqf_auto/mesh/",
+	"textureResolution": 128,
+	"pixelsPerMetre": 128,
+	"batches": [
+		{
+			"name": "cube",
+			"sizes": [
+				[ 1, 1, 1 ]
+			]
+		}
+	]
+}

@@ -95,7 +95,10 @@ function buildConfig(jobFile, job, sizeArr) {
 /////////////////////////////////////////////
 // run jobs file
 /////////////////////////////////////////////
-let g_jobFile = readJobs("gen_obj_mesh_jobs.json");
+const g_jobFileName = `${process.argv[process.argv.length - 1]}.json`;
+console.log(`Loading jobs from ${g_jobFileName}`);
+//let g_jobFile = readJobs("gen_obj_mesh_jobs.json");
+let g_jobFile = readJobs(g_jobFileName);
 
 // this config object will be reused. per-job stuff patched in
 // let g_config = {};

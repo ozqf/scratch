@@ -61,9 +61,9 @@ function extractMeshData(lines) {
 			let index = mesh.verts.length;
 			mesh.verts.push({
 				i: index,
-				x: tokens[1],
-				y: tokens[2],
-				z: tokens[3]
+				x: parseFloat(tokens[1]),
+				y: parseFloat(tokens[2]),
+				z: parseFloat(tokens[3])
 			});
 			continue;
 		}
@@ -148,6 +148,16 @@ function writeMesh(mesh, filePath) {
 	console.log(`\tDone`);
 }
 
+function multiplyVerts(mesh, multiplier) {
+	let l = mesh.verts.length;
+	for (let i = 0; i < l; ++i) {
+		let v = mesh.verts[i];
+		v.x *= multiplier;
+		v.y *= multiplier;
+		v.z *= multiplier;
+	}
+}
+
 function listMaterials(mesh) {
 	const l = mesh.materials.length;
 	for (let i = 0; i < l; ++i) {
@@ -158,6 +168,7 @@ function listMaterials(mesh) {
 
 //////////////////////////////////////////////
 // run
+const scaleFactor = 16;
 const fs = require("fs");
 const gInputPath = process.argv.length >= 4 ? process.argv[2] : "test_map_chunk.obj";
 const gOutputPath = process.argv.length >= 4 ? process.argv[3] : "output.obj";
@@ -165,5 +176,6 @@ console.log(`Input ${gInputPath}, output ${gOutputPath}`);
 const gLines = readMapLines(gInputPath);
 const gMesh = extractMeshData(gLines);
 listMaterials(gMesh);
+multiplyVerts(gMesh, 1 / scaleFactor);
 writeMesh(gMesh, gOutputPath);
 //console.log(gMesh);

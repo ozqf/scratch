@@ -16,8 +16,9 @@ function readMapLines(filePath) {
 	return lines;
 }
 
-function createEmptyMesh() {
+function createEmptyMesh(meshName) {
 	return {
+		name: meshName,
 		verts: [],
 		uvs: [],
 		normals: [],
@@ -47,7 +48,7 @@ usemtl test_textures/aqconc08
 f 69/1/1 70/32/1 71/39/1 72/4/1
 */
 function extractMeshData(lines) {
-	let mesh = createEmptyMesh();
+	let mesh = createEmptyMesh("none");
 	let currentMat = findOrCreateMaterial(mesh.materials, "");
 	
 	for (let i = 0; i < lines.length; ++i) {
@@ -166,16 +167,46 @@ function listMaterials(mesh) {
 	}
 }
 
+function outputSingleMesh(inputPath, outputPath) {
+	const gLines = readMapLines(gInputPath);
+	const gMesh = extractMeshData(gLines);
+	listMaterials(gMesh);
+	multiplyVerts(gMesh, 1 / scaleFactor);
+	writeMesh(gMesh, gOutputPath);
+}
+
+function extractEntityName(objectName) {
+	return objectName.split('_')[0];
+}
+
+function outputEntityMeshes(inputPath, outputPath) {
+	let meshes = {};
+	const lines = readMapLines(gInputPath);
+	const numLines = lines.length;
+	for (let i = 0; i < numLines; ++i) {
+		const line = lines[i];
+		const tokens = line.split(' ');
+		switch(tokens[0]) {
+			case 'o': {
+				let name = extractEntityName(tokens[1]);
+				if (typeof(meshes[name]) === "undefined") {
+					meshes[name] = createEmptyMesh(name);
+				}
+			} break;
+		}
+	}
+	const keys = Object.keys(meshes);
+	keys.forEach(k => {
+		console.log(meshes[k].name);
+	})
+}
+
 //////////////////////////////////////////////
 // run
 const scaleFactor = 16;
 const fs = require("fs");
-const gInputPath = process.argv.length >= 4 ? process.argv[2] : "test_map_chunk.obj";
+const gInputPath = process.argv.length >= 3 ? process.argv[2] : "test_map_chunk.obj";
 const gOutputPath = process.argv.length >= 4 ? process.argv[3] : "output.obj";
 console.log(`Input ${gInputPath}, output ${gOutputPath}`);
-const gLines = readMapLines(gInputPath);
-const gMesh = extractMeshData(gLines);
-listMaterials(gMesh);
-multiplyVerts(gMesh, 1 / scaleFactor);
-writeMesh(gMesh, gOutputPath);
+outputEntityMeshes(gInputPath, gOutputPath);
 //console.log(gMesh);

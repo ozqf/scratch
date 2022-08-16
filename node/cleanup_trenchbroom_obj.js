@@ -27,11 +27,7 @@ function createNewMaterial(matName) {
 function createEmptyMesh(meshName) {
 	return {
 		name: meshName,
-		verts: [],
-		uvs: [],
-		normals: [],
-		materials: {},
-		faces: []
+		materials: {}
 	};
 }
 
@@ -57,8 +53,7 @@ function extractOrderedListFromDict(dict) {
 ////////////////////////////////////////////////////////
 // writing
 ////////////////////////////////////////////////////////
-function writeMesh(mesh, outputDir, fileNamePrefix) {
-    const path = `${outputDir}/${fileNamePrefix}_${mesh.name}.obj`;
+function writeMesh(mesh, path) {
     console.log(`Writing mesh ${mesh.name} to ${path}`);
     // tally up primitives
     const prims = {
@@ -124,11 +119,12 @@ function writeMesh(mesh, outputDir, fileNamePrefix) {
     });
     txt += `\n# objects\n`;
     let bWroteObject = false;
-    Object.keys(mesh.materials).map(k => mesh.materials[k]).forEach(mat => {
+    Object.keys(mesh.materials).map(k => mesh.materials[k]).forEach((mat, i) => {
         if (!bWroteObject) {
             txt += `\no ${mesh.name}\n`;
             bWroteObject = true
         }
+        console.log(`Mat ${i}: ${mat.name}`);
         txt += `usemtl ${mat.name}\n`;
         mat.faces.forEach(face => {
             let faceTxt = "f";
@@ -153,7 +149,14 @@ function writeMeshes(meshes, fileDir, fileNamePrefix) {
     const meshList = Object.keys(meshes).map(k => meshes[k]);
     console.log(`Writing ${meshList.length} meshes`);
     meshList.forEach(mesh => {
-        writeMesh(mesh, fileDir, fileNamePrefix);
+        let outputPath = fileNamePrefix;
+        if (meshList.length > 0) {
+            outputPath = `${fileNamePrefix}_${mesh.name}.obj`;
+        }
+        if (fileDir !== "") {
+            outputPath = `${fileDir}/${outputPath}`;
+        }
+        writeMesh(mesh, outputPath);
     });
 }
 
@@ -217,7 +220,10 @@ function readEntityMeshes(inputPath) {
 
             // add this face to the current material
             case 'f': {
-                if (mat.name === "skip") {
+                // if (mat.name === "skip") {
+                //     continue;
+                // }
+                if (mat === null) {
                     continue;
                 }
                 // iterate through remaining tokens
@@ -257,6 +263,10 @@ function readEntityMeshes(inputPath) {
             case 'usemtl': {
                 const split = tokens[1].split('/');
                 const name = split[split.length - 1];
+                if (name === "skip") {
+                    mat = null;
+                    continue;
+                }
                 if (!mesh) {
                     throw 'No mesh for usemtl';
                 }
@@ -300,5 +310,6 @@ const gOutputDir = process.argv.length >= 4 ? process.argv[3] : "";
 const gOutputFilePrefix = process.argv.length >= 5 ? process.argv[4] : "output";
 console.log(`Input ${gInputPath}, output dir ${gOutputDir} file prefix ${gOutputFilePrefix}`);
 const meshes = readEntityMeshes(gInputPath);
-fs.writeFileSync("meshes_raw.json", JSON.stringify(meshes, null, 4))
+// for debugging:
+//fs.writeFileSync("meshes_raw.json", JSON.stringify(meshes, null, 4))
 writeMeshes(meshes, gOutputDir, gOutputFilePrefix);

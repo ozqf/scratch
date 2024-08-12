@@ -23,7 +23,7 @@ function listAllFiles(rootPath, files) {
     let len = list.length;
     for (let i = 0; i < len; ++i) {
         // clip drive letter off
-        let path = list[i].substring(2);
+        let path = list[i].substring(rootPath.length);
         files[path] = 0;
     }
 }
@@ -64,7 +64,11 @@ keysA.forEach(k => {
 
 let inBNotA = [];
 keysB.forEach(k => {
-    if (typeof(dirAContents[k]) === "undefined") {
+    /*if (typeof(dirAContents[k]) === "undefined") {
+        inBNotA.push(k);
+    }*/
+	let vs = dirAContents[k];
+    if (typeof(vs) === "undefined") {
         inBNotA.push(k);
     }
 });
